@@ -5,8 +5,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Arushad Ahmed",
-            "email": "arushad@javaabu.com"
+            "name": "Athfan Khaleel",
+            "email": "athfan@javaabu.com"
         }
     ],
     "require": {
@@ -38,15 +38,6 @@
             ]
         }
     },
-    "minimum-stability": "stable",
-    "repositories": {
-        "laravel-activitylog": {
-            "type": "vcs",
-            "url": "https://github.com/Javaabu/laravel-activitylog.git"
-        },
-        "foo": {
-            "type": "vcs",
-            "url": "https://bar.com"
-        }
-    }
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
