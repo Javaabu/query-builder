@@ -1,9 +1,9 @@
 <?php
 
-namespace Javaabu\{YourPackage}\Tests;
+namespace Javaabu\QueryBuilder\Tests;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Javaabu\{YourPackage}\{YourPackage}ServiceProvider;
+use Javaabu\QueryBuilder\QueryBuilderServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -18,8 +18,8 @@ abstract class TestCase extends BaseTestCase
 
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
-        return [{YourPackage}ServiceProvider::class];
+        return [QueryBuilderServiceProvider::class];
     }
 }

@@ -1,7 +1,7 @@
 {
-    "name": "javaabu/{your-package}",
-    "description": "{package description}",
-    "homepage": "https://github.com/Javaabu/{your-package}",
+    "name": "javaabu/query-builder",
+    "description": "Modifications on top of spatie/query-builder",
+    "homepage": "https://github.com/Javaabu/query-builder",
     "license": "MIT",
     "authors": [
         {
@@ -12,6 +12,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/support": "^9.0 || ^10.0 || ^11.0",
+        "spatie/laravel-query-builder": "^5.0"
     },
     "require-dev": {
         "orchestra/testbench": "^7.0 || ^8.0 || ^9.0",
@@ -19,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Javaabu\\{YourPackage}\\": "src/"
+            "Javaabu\\QueryBuilder\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Javaabu\\{YourPackage}\\Tests\\": "tests/"
+            "Javaabu\\QueryBuilder\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -33,9 +34,19 @@
         },
         "laravel": {
             "providers": [
-                "Javaabu\\{YourPackage}\\{YourPackage}ServiceProvider"
+                "Javaabu\\QueryBuilder\\QueryBuilderServiceProvider"
             ]
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "repositories": {
+        "laravel-activitylog": {
+            "type": "vcs",
+            "url": "https://github.com/Javaabu/laravel-activitylog.git"
+        },
+        "foo": {
+            "type": "vcs",
+            "url": "https://bar.com"
+        }
+    }
 }

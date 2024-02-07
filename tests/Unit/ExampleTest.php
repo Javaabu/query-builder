@@ -1,8 +1,8 @@
 <?php
 
-namespace Javaabu\{YourPackage}\Tests\Unit;
+namespace Javaabu\QueryBuilder\Tests\Unit;
 
-use Javaabu\{YourPackage}\Tests\TestCase;
+use Javaabu\QueryBuilder\Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
