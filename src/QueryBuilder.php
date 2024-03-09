@@ -142,31 +142,23 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
      */
     protected function ensureAllFieldsExist()
     {
-        $subjectTable = $this->getSubject()->getModel()->getTable();
+        $modelTable = $this->getSubject()->getModel()->getTable();
 
         $requestedFields = $this->request->fields()
-            ->map(function ($fields, $model) use ($subjectTable) {
-                if ($model) {
-                    $tableName = Str::snake(preg_replace('/-/', '_', $model));
-                } else {
-                    $tableName = $subjectTable;
-                }
+            ->map(function ($fields, $model) use ($modelTable) {
+                $tableName = $model;
 
-                $fields = array_map([Str::class, 'snake'], $fields);
-
-                return $this->prependFieldsWithTableName($fields, $tableName);
+                return $this->prependFieldsWithTableName($fields, $model === '_' ? $modelTable : $tableName);
             })
             ->flatten()
             ->unique();
 
         // get rid of any appended fields present
         $requestedFields = $requestedFields->diff(
-            $this->prependFieldsWithTableName(($this->allowedAppends ? $this->allowedAppends->all() : []), $subjectTable)
+            $this->prependFieldsWithTableName(($this->allowedAppends ? $this->allowedAppends->all() : []), $modelTable)
         );
 
         $unknownFields = $requestedFields->diff($this->allowedFields);
-
-        //dd($unknownFields);
 
         if ($unknownFields->isNotEmpty()) {
             throw InvalidFieldQuery::fieldsNotAllowed($unknownFields, $this->allowedFields);

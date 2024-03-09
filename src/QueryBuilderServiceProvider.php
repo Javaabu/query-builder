@@ -12,11 +12,6 @@ class QueryBuilderServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // declare publishes
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('query-builder.php'),
-            ], 'query-builder-config');
-        }
     }
 
     /**
@@ -24,7 +19,6 @@ class QueryBuilderServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // merge package config with user defined config
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'query-builder');
+        //
     }
 }
