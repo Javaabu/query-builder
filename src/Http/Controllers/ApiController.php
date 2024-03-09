@@ -3,6 +3,7 @@
 namespace Javaabu\QueryBuilder\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Javaabu\QueryBuilder\QueryBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -14,11 +15,13 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\QueryBuilderRequest;
+use Illuminate\Routing\Controller as BaseController;
 
-abstract class ApiController
+abstract class ApiController extends BaseController
 {
     use AuthorizesRequests;
     use ValidatesRequests;
+    use DispatchesJobs;
 
     /**
      * Query builder request
