@@ -110,4 +110,24 @@ class ApiControllerTest extends TestCase
                 'slug' => 'orange',
             ]);
     }
+
+    /** @test */
+    public function it_can_list_only_specific_api_model_fields(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $product = Product::factory()->create([
+            'name' => 'Apple',
+            'slug' => 'orange',
+        ]);
+
+        $this->getJson('/products?fields=id,name&append=')
+            ->assertSuccessful()
+            ->assertJsonFragment([
+                'name' => 'Apple',
+            ])
+            ->assertJsonMissing([
+                'slug' => 'orange',
+            ]);
+    }
 }

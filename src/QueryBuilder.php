@@ -250,18 +250,14 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
      */
     protected function addRequestedModelFieldsToQuery()
     {
-        $modelTableName = $this->getSubject()->getModel()->getTable();
-        $prepend_table_name = true;
+        $modelTableName = $this->getModel()->getTable();
 
-        if ($this->request->has('fields')) {
-            $modelFields = $this->request->fields()->get($modelTableName);
+        $fields = $this->request->fields();
 
-            if (!$modelFields) {
-                $modelFields = $this->request->fields()->get(0);
-            }
-        } else {
-            //$prepend_table_name = false;
-            $modelFields = $this->allowedFields->all();
+        $modelFields = $fields->has($modelTableName) ? $fields->get($modelTableName) : $fields->get('_');
+
+        if (empty($modelFields)) {
+            return;
         }
 
         // get all append fields to include
@@ -288,7 +284,7 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
             return;
         }
 
-        $prependedFields = $prepend_table_name ? $this->prependFieldsWithTableName($modelFields, $modelTableName) : $modelFields;
+        $prependedFields = $this->prependFieldsWithTableName($modelFields, $modelTableName);
 
         // get rid of any appended fields present
         $prependedFields = array_diff(
