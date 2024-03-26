@@ -184,7 +184,8 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
                 }
 
                 $fields = array_map([Str::class, 'snake'], $fields);
-                if ($tableName == $subjectTable) {
+
+                if ($tableName == $subjectTable || $tableName == '_') {
                     return $this->retrieveFieldsToAppends($fields);
                 }
 
@@ -237,6 +238,7 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
             // append all by default
             $request_appends = $this->request->has('append') ? $this->request->appends()->toArray()
                 : ($this->allowedAppends ? $this->allowedAppends->all() : []);
+
 
             $fields = array_merge($request_appends, $this->getFieldAppends());
             $this->allAppends = collect($fields)->intersect($this->allowedAppends)->values()->all();

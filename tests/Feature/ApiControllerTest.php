@@ -130,4 +130,24 @@ class ApiControllerTest extends TestCase
                 'slug' => 'orange',
             ]);
     }
+
+    /** @test */
+    public function it_can_load_api_model_appends_from_fields_even_if_appends_is_blank(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $product = Product::factory()->create([
+            'name' => 'Apple',
+            'slug' => 'orange',
+        ]);
+
+        $this->getJson('/products?fields=id,formatted_name&append=')
+            ->assertSuccessful()
+            ->assertJsonFragment([
+                'formatted_name' => 'Formatted Apple',
+            ])
+            ->assertJsonMissing([
+                'slug' => 'orange',
+            ]);
+    }
 }
