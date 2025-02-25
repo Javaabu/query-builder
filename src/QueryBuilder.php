@@ -60,7 +60,7 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
     /**
      * Validate filters conditionally
      */
-    protected function ensureAllFiltersExist()
+    protected function ensureAllFiltersExist(): void
     {
         if (!$this->ignoreInvalidFilters) {
             parent::ensureAllFiltersExist();
@@ -72,7 +72,7 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
      *
      * @param  Collection  $includes
      */
-    protected function addIncludesToQuery(Collection $includes)
+    protected function addIncludesToQuery(Collection $includes): void
     {
         if (!$this->request->has('include')) {
             $includes = $this->allowedIncludes->map(function (AllowedInclude $allowedInclude) {
@@ -140,7 +140,7 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
     /**
      * Modified to support fields without table name
      */
-    protected function ensureAllFieldsExist()
+    protected function ensureAllFieldsExist(): void
     {
         $modelTable = $this->getSubject()->getModel()->getTable();
 
@@ -170,7 +170,7 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
      *
      * @return array
      */
-    protected function getFieldAppends()
+    protected function getFieldAppends(): array
     {
         $subjectTable = $this->getSubject()->getModel()->getTable();
 
@@ -218,7 +218,7 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
      * @param  Collection  $results
      * @return Collection
      */
-    protected function addAppendsToResults(Collection $results)
+    protected function addAppendsToResults(Collection $results): Collection
     {
         return $results->each(function (Model $result) {
             $to_append = $this->getAllAppends();
@@ -250,7 +250,7 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
     /**
      * Modified to support fields without table name
      */
-    protected function addRequestedModelFieldsToQuery()
+    protected function addRequestedModelFieldsToQuery(): void
     {
         $modelTableName = $this->getModel()->getTable();
 

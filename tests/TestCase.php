@@ -20,6 +20,9 @@ abstract class TestCase extends BaseTestCase
 
     protected function getPackageProviders($app): array
     {
-        return [QueryBuilderServiceProvider::class];
+        return [
+            \Spatie\QueryBuilder\QueryBuilderServiceProvider::class,
+            QueryBuilderServiceProvider::class
+        ];
     }
 }
