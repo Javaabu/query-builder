@@ -8,6 +8,7 @@ use Javaabu\QueryBuilder\Tests\InteractsWithDatabase;
 use Javaabu\QueryBuilder\Tests\Models\Brand;
 use Javaabu\QueryBuilder\Tests\Models\Product;
 use Javaabu\QueryBuilder\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ApiControllerTest extends TestCase
 {
@@ -28,7 +29,7 @@ class ApiControllerTest extends TestCase
         Route::get('/products/{id}', [ProductsController::class, 'show'])->name('products.show');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_list_api_models(): void
     {
         $products = Product::factory()->count(10)->create();
@@ -37,7 +38,7 @@ class ApiControllerTest extends TestCase
              ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_api_models(): void
     {
         $product = Product::factory()->create();
@@ -49,7 +50,7 @@ class ApiControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_api_models(): void
     {
         $product_1 = Product::factory()->create([
@@ -70,7 +71,7 @@ class ApiControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_api_model_relations(): void
     {
         $this->withoutExceptionHandling();
@@ -91,7 +92,7 @@ class ApiControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_api_model_appends(): void
     {
         $this->withoutExceptionHandling();
@@ -111,7 +112,7 @@ class ApiControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_list_only_specific_api_model_fields(): void
     {
         $this->withoutExceptionHandling();
@@ -131,7 +132,7 @@ class ApiControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_api_model_appends_from_fields_even_if_appends_is_blank(): void
     {
         $this->withoutExceptionHandling();
