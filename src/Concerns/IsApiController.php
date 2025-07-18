@@ -63,6 +63,11 @@ trait IsApiController
         return abs($request->input('per_page', $default));
     }
 
+    protected function getQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for($this->getBaseQuery());
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -75,7 +80,7 @@ trait IsApiController
 
         $this->validate($request, $this->getIndexValidation());
 
-        $query = QueryBuilder::for($this->getBaseQuery());
+        $query = $this->getQueryBuilder();
 
         if ($default_sort = $this->getDefaultSort()) {
             $query->defaultSort($default_sort);
@@ -111,7 +116,7 @@ trait IsApiController
         $this->validate($request, $this->getShowValidation());
 
         try {
-            $model = QueryBuilder::for($this->getBaseQuery())
+            $model = $this->getQueryBuilder()
                 ->allowedAppends($this->getAllShowAllowedAppends())
                 ->fieldsToAlwaysInclude($this->getFieldsToAlwaysInclude())
                 ->allowedFields($this->getAllowedFields())
