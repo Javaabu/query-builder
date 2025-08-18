@@ -2,6 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/javaabu/query-builder.svg?style=flat-square)](https://packagist.org/packages/javaabu/query-builder)
 [![Test Status](../../actions/workflows/run-tests.yml/badge.svg)](../../actions/workflows/run-tests.yml)
+![Code Coverage Badge](./.github/coverage.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/javaabu/query-builder.svg?style=flat-square)](https://packagist.org/packages/javaabu/query-builder)
 
 Modifications on top of spatie/query-builder
