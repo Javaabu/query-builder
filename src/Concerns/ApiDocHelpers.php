@@ -87,7 +87,7 @@ trait ApiDocHelpers
         return $new_instance->getMaxPerPage();
     }
 
-    public function apiDocAllowUnlimitedResultsPerPage(): bool
+    public static function apiDocAllowUnlimitedResultsPerPage(): bool
     {
         /** @var self $new_instance */
         $new_instance = app(static::class);
@@ -194,9 +194,16 @@ trait ApiDocHelpers
 
                 $metadata = $filter_metadata[$filter_name] ?? [];
 
+                $filter_title = Str::of($filter_name)
+                    ->replaceMatches('/([a-z])([A-Z])/', '$1 $2') // Split camelCase: pEnding → p Ending
+                    ->replace('_', ' ')                    // Replace custom separator (e.g. _ or space) with space
+                    ->lower()                                     // Lowercase everything
+                    ->title()                                     // Capitalize words
+                    ->toString();
+
                 $params["filter[{$filter_name}]"] = array_merge([
                     'type' => 'string',
-                    'description' => is_string($filter) ? 'Filter by the ' . Str::lower(slug_to_title($filter))  . ' of the ' . $singular_resource_name : 'Apply the ' . Str::lower(slug_to_title($filter_name)) . ' filter',
+                    'description' => is_string($filter) ? 'Filter by the ' . Str::lower($filter_title)  . ' of the ' . $singular_resource_name : 'Apply the ' . Str::lower($filter_title) . ' filter',
                 ], $metadata);
             }
         }

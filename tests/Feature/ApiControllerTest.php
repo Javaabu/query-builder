@@ -30,6 +30,81 @@ class ApiControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_can_get_index_method_api_doc_metadata(): void
+    {
+        $params = ProductsController::apiDocControllerMethodMetadata('index');
+
+        $this->assertIsArray($params);
+
+        $this->assertEquals('Products', $params['groupName']);
+        $this->assertEquals('Endpoints for listing and viewing products', $params['groupDescription']);
+        $this->assertEquals('List all products', $params['title']);
+        $this->assertEquals('Fetch all products. Supports filtering, sorting, pagination and field selection.', $params['description']);
+    }
+
+    #[Test]
+    public function it_can_get_show_method_api_doc_metadata(): void
+    {
+        $params = ProductsController::apiDocControllerMethodMetadata('show');
+
+        $this->assertIsArray($params);
+
+        $this->assertEquals('Products', $params['groupName']);
+        $this->assertEquals('Endpoints for listing and viewing products', $params['groupDescription']);
+        $this->assertEquals('View a single product', $params['title']);
+        $this->assertEquals('Fetch a single product. Supports field selection.', $params['description']);
+    }
+
+    #[Test]
+    public function it_can_get_other_methods_api_doc_metadata(): void
+    {
+        $params = ProductsController::apiDocControllerMethodMetadata('fake');
+
+        $this->assertIsArray($params);
+
+        $this->assertEquals('Products', $params['groupName']);
+        $this->assertEquals('Endpoints for listing and viewing products', $params['groupDescription']);
+
+        $this->assertArrayNotHasKey('title', $params);
+        $this->assertArrayNotHasKey('description', $params);
+    }
+
+    #[Test]
+    public function it_can_get_index_method_api_doc_query_params(): void
+    {
+        $params = ProductsController::apiDocControllerMethodQueryParameters('index');
+
+        $this->assertIsArray($params);
+
+        $this->assertArrayHasKey('fields', $params);
+        $this->assertArrayHasKey('include', $params);
+        $this->assertArrayHasKey('append', $params);
+        $this->assertArrayHasKey('sort', $params);
+        $this->assertArrayHasKey('per_page', $params);
+        $this->assertArrayHasKey('page', $params);
+        $this->assertArrayHasKey('filter[name]', $params);
+        $this->assertArrayHasKey('filter[search]', $params);
+    }
+
+    #[Test]
+    public function it_can_get_show_method_api_doc_query_params(): void
+    {
+        $params = ProductsController::apiDocControllerMethodQueryParameters('show');
+
+        $this->assertIsArray($params);
+
+        $this->assertArrayHasKey('fields', $params);
+        $this->assertArrayHasKey('include', $params);
+        $this->assertArrayHasKey('append', $params);
+
+        $this->assertArrayNotHasKey('sort', $params);
+        $this->assertArrayNotHasKey('per_page', $params);
+        $this->assertArrayNotHasKey('page', $params);
+        $this->assertArrayNotHasKey('filter[name]', $params);
+        $this->assertArrayNotHasKey('filter[search]', $params);
+    }
+
+    #[Test]
     public function it_can_list_api_models(): void
     {
         $products = Product::factory()->count(10)->create();

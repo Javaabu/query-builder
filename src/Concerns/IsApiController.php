@@ -288,7 +288,18 @@ trait IsApiController
      */
     public function getAllowedAppendAttributes(): array
     {
-        return Arr::rootKeys($this->getAllowedAppends());
+        $appends = $this->getAllowedAppends();
+        $keys = [];
+
+        foreach ($appends as $key => $value) {
+            if (is_array($value)) {
+                $keys[] = $key;
+            } else {
+                $keys[] = $value;
+            }
+        }
+
+        return $keys;
     }
 
     /**
@@ -298,7 +309,19 @@ trait IsApiController
      */
     public function getShowAllowedAppendAttributes(): array
     {
-        return Arr::rootKeys($this->getAllShowAllowedAppends());
+
+        $appends = $this->getAllShowAllowedAppends();
+        $keys = [];
+
+        foreach ($appends as $key => $value) {
+            if (is_array($value)) {
+                $keys[] = $key;
+            } else {
+                $keys[] = $value;
+            }
+        }
+
+        return $keys;
     }
 
     /**
