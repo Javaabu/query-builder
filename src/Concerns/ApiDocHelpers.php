@@ -71,6 +71,30 @@ trait ApiDocHelpers
         return $new_instance->getAllowedSorts();
     }
 
+    public static function apiDocDefaultPerPage(): int
+    {
+        /** @var self $new_instance */
+        $new_instance = app(static::class);
+
+        return $new_instance->getDefaultPerPage();
+    }
+
+    public static function apiDocMaxPerPage(): int
+    {
+        /** @var self $new_instance */
+        $new_instance = app(static::class);
+
+        return $new_instance->getMaxPerPage();
+    }
+
+    public function apiDocAllowUnlimitedResultsPerPage(): bool
+    {
+        /** @var self $new_instance */
+        $new_instance = app(static::class);
+
+        return $new_instance->allowUnlimitedResultsPerPage();
+    }
+
     public static function apiDocDefaultQueryParameters(
         array $fields = [],
         array $sorts = [],
@@ -78,7 +102,8 @@ trait ApiDocHelpers
         array $appends = [],
         array $includes = [],
         array $filters = [],
-        array $filter_metadata = []
+        array $filter_metadata = [],
+        bool $include_pagination = false
     ): array
     {
         $params = [];
@@ -134,6 +159,23 @@ trait ApiDocHelpers
             ];
         }
 
+        if ($include_pagination) {
+            $params['per_page'] = [
+                'type' => 'integer',
+                'description' => 'How many results to return per page. '.
+                    (static::apiDocAllowUnlimitedResultsPerPage() ? '<br></br>To return all results, set `per_page` to `-1`' : '').
+                    '<br>**Max per page:** ' . static::apiDocMaxPerPage() .
+                    '<br>**Default per page:** ' . static::apiDocDefaultPerPage(),
+                'example' => static::apiDocDefaultPerPage(),
+            ];
+
+            $params['page'] = [
+                'type' => 'integer',
+                'description' => 'For paginated results, which page to return.' ,
+                'example' => 1,
+            ];
+        }
+
         $singular_resource_name = static::apiDocResourceNameSingularLower();
 
         if ($filters) {
@@ -171,7 +213,8 @@ trait ApiDocHelpers
             static::apiDocIndexAllowedAppends(),
             static::apiDocAllowedIncludes(),
             static::apiDocAllowedFilters(),
-            static::apiDocFilterMetadata()
+            static::apiDocFilterMetadata(),
+            true
         );
     }
 
