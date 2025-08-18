@@ -20,6 +20,7 @@ trait IsApiController
     use AuthorizesRequests;
     use ValidatesRequests;
     use DispatchesJobs;
+    use ApiDocHelpers;
 
     /**
      * Query builder request

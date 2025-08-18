@@ -16,7 +16,11 @@
     },
     "require-dev": {
         "orchestra/testbench": "^8.0 || ^9.0 || ^10.0",
-        "phpunit/phpunit": "^10.5 || ^11.5.3"
+        "phpunit/phpunit": "^10.5 || ^11.5.3",
+        "knuckleswtf/scribe": "^5.3"
+    },
+    "suggest": {
+        "knuckleswtf/scribe": "Required for API docs generation"
     },
     "autoload": {
         "psr-4": {
