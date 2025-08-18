@@ -14,7 +14,7 @@ class ProductsController extends ApiController
      *
      * @return Builder
      */
-    protected function getBaseQuery(): Builder
+    public function getBaseQuery(): Builder
     {
         return Product::query();
     }
@@ -24,7 +24,7 @@ class ProductsController extends ApiController
      *
      * @return array
      */
-    protected function getAllowedFields(): array
+    public function getAllowedFields(): array
     {
         return array_diff(\Schema::getColumnListing('products'), (new Product)->getHidden());
     }
@@ -34,7 +34,7 @@ class ProductsController extends ApiController
      *
      * @return array
      */
-    protected function getAllowedIncludes(): array
+    public function getAllowedIncludes(): array
     {
         return [
             'brand',
@@ -46,7 +46,7 @@ class ProductsController extends ApiController
      *
      * @return array
      */
-    protected function getAllowedAppends(): array
+    public function getAllowedAppends(): array
     {
         return [
             'formatted_name' => [
@@ -60,7 +60,7 @@ class ProductsController extends ApiController
      *
      * @return array
      */
-    protected function getAllowedSorts(): array
+    public function getAllowedSorts(): array
     {
         return [
             'id',
@@ -76,7 +76,7 @@ class ProductsController extends ApiController
      *
      * @return string
      */
-    protected function getDefaultSort(): string
+    public function getDefaultSort(): string
     {
         return 'name';
     }
@@ -86,7 +86,7 @@ class ProductsController extends ApiController
      *
      * @return array
      */
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             'name',

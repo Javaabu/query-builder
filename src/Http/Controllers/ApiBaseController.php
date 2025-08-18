@@ -29,35 +29,35 @@ abstract class ApiBaseController extends BaseController
     /**
      * Get the base query
      */
-    protected abstract function getBaseQuery(): Builder;
+    public abstract function getBaseQuery(): Builder;
 
     /**
      * Get the fields
      */
-    protected abstract function getAllowedFields(): array;
+    public abstract function getAllowedFields(): array;
 
     /**
      * Get the includes
      */
-    protected abstract function getAllowedIncludes(): array;
+    public abstract function getAllowedIncludes(): array;
 
     /**
      * Get the allowed appends
      */
-    protected abstract function getAllowedAppends(): array;
+    public abstract function getAllowedAppends(): array;
 
     /**
      * Get the allowed sorts
      */
-    protected abstract function getAllowedSorts(): array;
+    public abstract function getAllowedSorts(): array;
 
     /**
      * Get the default sort
      */
-    protected abstract function getDefaultSort(): string;
+    public abstract function getDefaultSort(): string;
 
     /**
      * Get the allowed filters
      */
-    protected abstract function getAllowedFilters(): array;
+    public abstract function getAllowedFilters(): array;
 }

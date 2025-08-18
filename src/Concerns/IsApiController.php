@@ -35,7 +35,7 @@ trait IsApiController
      *
      * @return bool
      */
-    protected function allowUnlimitedResultsPerPage(): bool
+    public function allowUnlimitedResultsPerPage(): bool
     {
         return property_exists($this, 'allow_unlimited_results') ? $this->allow_unlimited_results : false;
     }
@@ -176,7 +176,7 @@ trait IsApiController
     /**
      * Get the fields to always include
      */
-    protected function getFieldsToAlwaysInclude(): array
+    public function getFieldsToAlwaysInclude(): array
     {
         return [
             'id'
@@ -186,7 +186,7 @@ trait IsApiController
     /**
      * Get the index allowed fields
      */
-    protected function getIndexAllowedFields(): array
+    public function getIndexAllowedFields(): array
     {
         return $this->getAllowedFields();
     }
@@ -275,7 +275,7 @@ trait IsApiController
      *
      * @return array
      */
-    protected function getAllowedAppendAttributes(): array
+    public function getAllowedAppendAttributes(): array
     {
         return Arr::rootKeys($this->getAllowedAppends());
     }
@@ -285,7 +285,7 @@ trait IsApiController
      *
      * @return array
      */
-    protected function getShowAllowedAppendAttributes(): array
+    public function getShowAllowedAppendAttributes(): array
     {
         return Arr::rootKeys($this->getAllShowAllowedAppends());
     }
@@ -293,7 +293,7 @@ trait IsApiController
     /**
      * Get the show allowed appends
      */
-    protected function getAllShowAllowedAppends(): array
+    public function getAllShowAllowedAppends(): array
     {
         if (! $this->getShowAllowedAppends()) {
             return $this->getAllowedAppends();
@@ -309,7 +309,7 @@ trait IsApiController
     /**
      * Get the allowed appends for only show endpoint
      */
-    protected function getShowAllowedAppends(): array
+    public function getShowAllowedAppends(): array
     {
         return [];
     }
