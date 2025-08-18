@@ -9,6 +9,7 @@ use Javaabu\QueryBuilder\Tests\Models\Brand;
 use Javaabu\QueryBuilder\Tests\Models\Product;
 use Javaabu\QueryBuilder\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Spatie\QueryBuilder\Exceptions\InvalidFieldQuery;
 
 class ApiControllerTest extends TestCase
 {
@@ -224,6 +225,80 @@ class ApiControllerTest extends TestCase
             ])
             ->assertJsonMissing([
                 'slug' => 'orange',
+            ]);
+    }
+
+    #[Test]
+    public function it_can_include_dynamic_fields(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $product_1 = Product::factory()->create([
+            'name' => 'Apple'
+        ]);
+
+        $product_2 = Product::factory()->create([
+            'name' => 'Orange'
+        ]);
+
+        $this->getJson('/products?fields=id,rating&rating=10')
+            ->assertSuccessful()
+            ->assertJsonFragment([
+                'id' => $product_1->id,
+                'rating' => $product_1->id + 10,
+            ])
+            ->assertJsonFragment([
+                'id' => $product_2->id,
+                'rating' => $product_2->id + 10,
+            ]);
+    }
+
+    #[Test]
+    public function it_can_sort_by_dynamic_fields(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $product_1 = Product::factory()->create([
+            'name' => 'Apple'
+        ]);
+
+        $product_2 = Product::factory()->create([
+            'name' => 'Orange'
+        ]);
+
+        $this->getJson('/products?fields=id,name&rating=10&sort=rating')
+            ->assertSuccessful()
+            ->assertJsonFragment([
+                'id' => $product_1->id,
+            ])
+            ->assertJsonFragment([
+                'id' => $product_2->id,
+            ]);
+    }
+
+    #[Test]
+    public function it_cannot_include_dynamic_fields_if_required_params_are_missing(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $product_1 = Product::factory()->create([
+            'name' => 'Apple'
+        ]);
+
+        $product_2 = Product::factory()->create([
+            'name' => 'Orange'
+        ]);
+
+        $this->expectException(InvalidFieldQuery::class);
+
+        $this->getJson('/products?fields=id,rating')
+            ->assertJsonMissing([
+                'id' => $product_1->id,
+                'rating' => $product_1->id + 10,
+            ])
+            ->assertJsonMissing([
+                'id' => $product_2->id,
+                'rating' => $product_2->id + 10,
             ]);
     }
 }

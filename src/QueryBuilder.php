@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Javaabu\QueryBuilder\Concerns\AppendsAttributesToResults;
 use Javaabu\QueryBuilder\Exceptions\AllowedAppendsMustBeCalledBeforeAllowedFields;
+use Javaabu\QueryBuilder\Exceptions\AllowedDynamicFieldsMustBeCalledBeforeAllowedFields;
 use Javaabu\QueryBuilder\Exceptions\FieldsToAlwaysIncludeMustBeCalledBeforeAllowedFields;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\Exceptions\InvalidFieldQuery;
@@ -46,6 +47,22 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
      * @var array
      */
     protected $allAppends = null;
+
+    protected ?Collection $allowedDynamicFields = null;
+
+
+    public function allowedDynamicFields($fields): static
+    {
+        if ($this->allowedFields instanceof Collection) {
+            throw new AllowedDynamicFieldsMustBeCalledBeforeAllowedFields();
+        }
+
+        $fields = is_array($fields) ? $fields : func_get_args();
+
+        $this->allowedDynamicFields = collect($fields);
+
+        return $this;
+    }
 
     /**
      * Set to ignore invalid filters
@@ -155,7 +172,12 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
 
         // get rid of any appended fields present
         $requestedFields = $requestedFields->diff(
-            $this->prependFieldsWithTableName(($this->allowedAppends ? $this->allowedAppends->all() : []), $modelTable)
+            $this->prependFieldsWithTableName(($this->allowedAppends ? $this->allowedAppends->all() : []), $modelTable),
+        );
+
+        // get rid of any dynamic fields present
+        $requestedFields = $requestedFields->diff(
+            $this->prependFieldsWithTableName(($this->allowedDynamicFields ? $this->allowedDynamicFields->all() : []), $modelTable)
         );
 
         $unknownFields = $requestedFields->diff($this->allowedFields);
@@ -292,6 +314,12 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
         $prependedFields = array_diff(
             $prependedFields,
             $this->prependFieldsWithTableName(($this->allowedAppends ? $this->allowedAppends->all() : []), $modelTableName)
+        );
+
+        // get rid of any dynamic fields present
+        $prependedFields = array_diff(
+            $prependedFields,
+            $this->prependFieldsWithTableName(($this->allowedDynamicFields ? $this->allowedDynamicFields->all() : []), $modelTableName)
         );
 
         $prependedFields = array_unique($prependedFields);

@@ -101,7 +101,8 @@ trait IsApiController
             ->allowedFilters($this->getAllowedFilters())
             ->allowedAppends($this->getAllowedAppends())
             ->fieldsToAlwaysInclude($this->getFieldsToAlwaysInclude())
-            ->allowedFields($this->getAllowedFields())
+            ->allowedDynamicFields($this->getIndexAllowedDynamicFields())
+            ->allowedFields($this->getIndexAllowedFields())
             ->allowedIncludes($this->getAllowedIncludes());
 
         $query = $this->modifyQuery($query);
@@ -130,6 +131,7 @@ trait IsApiController
             $model = $this->getQueryBuilder()
                 ->allowedAppends($this->getAllShowAllowedAppends())
                 ->fieldsToAlwaysInclude($this->getFieldsToAlwaysInclude())
+                ->allowedDynamicFields($this->getAllowedDynamicFields())
                 ->allowedFields($this->getAllowedFields())
                 ->allowedIncludes($this->getAllowedIncludes());
 
@@ -346,5 +348,21 @@ trait IsApiController
     public function getShowAllowedAppends(): array
     {
         return [];
+    }
+
+    /**
+     * Get the dynamic fields
+     */
+    public function getAllowedDynamicFields(): array
+    {
+        return [];
+    }
+
+    /**
+     * Get the dynamic fields
+     */
+    public function getIndexAllowedDynamicFields(): array
+    {
+        return $this->getAllowedDynamicFields();
     }
 }

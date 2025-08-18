@@ -36,4 +36,15 @@ class Product extends Model
     {
         return 'Formatted ' . $this->name;
     }
+
+    public function scopeWithRating($query, $rating)
+    {
+        if (! $query->getQuery()->columns) {
+            $query->select('*');
+        }
+
+        $rating = (int) $rating;
+
+        return $query->selectRaw('(' .$rating . ' + id) as rating');
+    }
 }

@@ -14,7 +14,9 @@ For these scenarios, you can override the `modifyQuery` method to call these sco
 protected function modifyQuery(\Spatie\QueryBuilder\QueryBuilder $query): \Spatie\QueryBuilder\QueryBuilder
 {
     if (request()->has('lat') && request()->has('lng')) {
-        if ($this->sorts()->has('distance') || $this->fields()->has('distance')) {
+        $fields = $this->fields()->isNotEmpty() ? $this->fields()->get('_') : [];
+
+        if ($this->sorts()->contains('distance') || $this->sorts()->contains('-distance') || (is_array($fields) && in_array('distance', $fields))) {
             $query->withDistance('islands.coordinates', new Point(request()->input('lat'), request()->input('lng'), Srid::WGS84));
         }
     }
@@ -39,7 +41,7 @@ protected function modifyQuery(\Spatie\QueryBuilder\QueryBuilder $query): \Spati
 {   
     $fields = $this->fields()->isNotEmpty() ? $this->fields()->get('_') : [];
 
-    if ((is_array($fields) && in_array('formatted_name', $fields)) || $this->appends()->has('formatted_name')) {
+    if ((is_array($fields) && in_array('formatted_name', $fields)) || $this->appends()->contains('formatted_name')) {
         $query->with('atoll');
     }
 
@@ -49,20 +51,24 @@ protected function modifyQuery(\Spatie\QueryBuilder\QueryBuilder $query): \Spati
 
 The `$this->fields()->get('_')` will return the fields requested for the main model.
 
-For complex selects, you might need to dynamically set the allowed fields and sorts as well.
+For complex selects, use the `getAllowedDynamicFields` method to allow these fields to be included.
 
 ```php
-public function getAllowedFields(): array
+public function getAllowedDynamicFields(): array
 {
-    $fields = \Schema::getColumnListing('islands');
+    $fields = [];
 
     if (request()->has('lat') && request()->has('lng')) {
         $fields[] = 'distance';
     }
 
-    return array_diff($fields, (new Island)->getHidden());
+    return $fields;
 }
+```
 
+You may need to also dynamically set the allowed sorts as well.
+
+```php
 public function getAllowedSorts(): array
 {
     $sorts = [
