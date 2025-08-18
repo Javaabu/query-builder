@@ -37,11 +37,6 @@ abstract class ApiBaseController extends BaseController
     public abstract function getAllowedFields(): array;
 
     /**
-     * Get the dynamic fields
-     */
-    public abstract function getAllowedDynamicFields(): array;
-
-    /**
      * Get the includes
      */
     public abstract function getAllowedIncludes(): array;
