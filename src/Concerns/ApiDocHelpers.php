@@ -7,6 +7,107 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 trait ApiDocHelpers
 {
+    public static function apiDocAdditionalIndexQueryParameters(): array
+    {
+        return [];
+    }
+
+    public static function apiDocAdditionalShowQueryParameters(): array
+    {
+        return [];
+    }
+
+    public static function apiDocAdditionalIndexAllowedFields(): array
+    {
+        return [];
+    }
+
+    public static function apiDocAdditionalIndexAllowedAppends(): array
+    {
+        return [];
+    }
+
+    public static function apiDocAdditionalShowAllowedFields(): array
+    {
+        return static::apiDocAdditionalIndexAllowedFields();
+    }
+
+    public static function apiDocAdditionalShowAllowedAppends(): array
+    {
+        return static::apiDocAdditionalIndexAllowedAppends();
+    }
+
+    public static function apiDocAdditionalAllowedSorts(): array
+    {
+        return [];
+    }
+
+    public static function apiDocAdditionalAllowedIncludes(): array
+    {
+        return [];
+    }
+
+    public static function apiDocAdditionalAllowedFilters(): array
+    {
+        return [];
+    }
+
+    public static function apiDocAllIndexAllowedFields(): array
+    {
+        return array_merge(
+            static::apiDocIndexAllowedFields(),
+            static::apiDocAdditionalIndexAllowedFields(),
+        );
+    }
+
+    public static function apiDocAllIndexAllowedAppends(): array
+    {
+        return array_merge(
+            static::apiDocIndexAllowedAppends(),
+            static::apiDocAdditionalIndexAllowedAppends(),
+        );
+    }
+
+    public static function apiDocAllShowAllowedFields(): array
+    {
+        return array_merge(
+            static::apiDocShowAllowedFields(),
+            static::apiDocAdditionalShowAllowedFields(),
+        );
+    }
+
+    public static function apiDocAllShowAllowedAppends(): array
+    {
+        return array_merge(
+            static::apiDocShowAllowedAppends(),
+            static::apiDocAdditionalShowAllowedAppends(),
+        );
+    }
+
+    public static function apiDocAllAllowedSorts(): array
+    {
+        return array_merge(
+            static::apiDocAllowedSorts(),
+            static::apiDocAdditionalAllowedSorts(),
+        );
+    }
+
+    public static function apiDocAllAllowedIncludes(): array
+    {
+        return array_merge(
+            static::apiDocAllowedIncludes(),
+            static::apiDocAdditionalAllowedIncludes(),
+        );
+    }
+
+    public static function apiDocAllAllowedFilters(): array
+    {
+        return array_merge(
+            static::apiDocAllowedFilters(),
+            static::apiDocAdditionalAllowedFilters(),
+        );
+    }
+
     public static function apiDocDefaultSort(): string
     {
         /** @var self $new_instance */
@@ -95,6 +196,142 @@ trait ApiDocHelpers
         return $new_instance->allowUnlimitedResultsPerPage();
     }
 
+    public static function apiDefaultFieldsDescription(): string
+    {
+        return 'Fields to include in the response. ' .
+            'You can provide the fields as a comma-separated list, or provide the fields as an array query parameter i.e `fields[]`. ' .
+            'By default all fields are included if the `fields` parameter is missing.';
+    }
+
+    public static function apiFieldsDescription(): string
+    {
+        return static::apiDefaultFieldsDescription();
+    }
+
+    public static function apiDocGenerateFieldsMetadata(array $fields): array
+    {
+        return [
+            'type' => 'string',
+            'description' => static::apiFieldsDescription() .
+                '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $fields)),
+            'enum' => $fields,
+            'example' => implode(',', $fields),
+        ];
+    }
+
+    public static function apiDefaultSortsDescription(): string
+    {
+        return 'Which fields to sort the results by. '.
+            '<br>To sort in descending order, append a `-` to the field name, e.g. `?sort=-created_at`. '.
+            '<br>To sort by multiple fields, provide a comma-separated list, e.g. `?sort=id,-created_at`. ';
+    }
+
+    public static function apiSortsDescription(): string
+    {
+        return static::apiDefaultSortsDescription();
+    }
+
+    public static function apiDocGenerateSortsMetadata(array $sorts, string $default_sort = ''): array
+    {
+        return [
+            'type' => 'string',
+            'description' => static::apiSortsDescription() .
+                '<br><br>**Allowed sorts:** ' . "\n" . implode("\n", array_map(fn ($field) => "- `$field`", $sorts)) . "\n\n" .
+                '<br>**Default sort:** ' . ($default_sort ? '`' . $default_sort . '`' : 'None'),
+            'enum' => static::apiDocAllowedSorts(),
+            'example' => static::apiDocDefaultSort(),
+        ];
+    }
+
+    public static function apiDefaultAppendsDescription(): string
+    {
+        return 'Model accessor fields to include in the response. ' .
+            'You can provide the append field as a comma-separated list, or provide the fields as an array query parameter i.e `append[]`. ' .
+            'By default all appends are included if the `append` parameter is missing. ' .
+            'To not append any fields, provide an empty string `?append=`';
+    }
+
+    public static function apiAppendsDescription(): string
+    {
+        return static::apiDefaultAppendsDescription();
+    }
+
+    public static function apiDocGenerateAppendsMetadata(array $appends): array
+    {
+        return [
+            'type' => 'string',
+            'description' => static::apiAppendsDescription() .
+                '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $appends)),
+            'enum' => $appends,
+            'example' => implode(',', $appends),
+        ];
+    }
+
+    public static function apiDefaultIncludesDescription(): string
+    {
+        return 'Model relations to include in the response. ' .
+            'You can provide the includes as a comma-separated list, or provide the includes as an array query parameter i.e `include[]`. ' .
+            'By default all includes are included if the `include` parameter is missing. ' .
+            'To not include any relations, provide an empty string `?include=`';
+    }
+
+    public static function apiIncludesDescription(): string
+    {
+        return static::apiDefaultIncludesDescription();
+    }
+
+    public static function apiDocGenerateIncludesMetadata(array $includes): array
+    {
+        return [
+            'type' => 'string',
+            'description' => static::apiIncludesDescription() . '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $includes)),
+            'enum' => $includes,
+            'example' => implode(',', $includes),
+        ];
+    }
+
+    public static function apiDocGeneratePerPageMetadata(): array
+    {
+        return [
+            'type' => 'integer',
+            'description' => 'How many results to return per page. '.
+                (static::apiDocAllowUnlimitedResultsPerPage() ? '<br></br>To return all results, set `per_page` to `-1`' : '').
+                '<br>**Max per page:** ' . static::apiDocMaxPerPage() .
+                '<br>**Default per page:** ' . static::apiDocDefaultPerPage(),
+            'example' => static::apiDocDefaultPerPage(),
+        ];
+    }
+
+    public static function apiDocGeneratePageMetadata(): array
+    {
+        return [
+            'type' => 'integer',
+            'description' => 'For paginated results, which page to return.' ,
+            'example' => 1,
+        ];
+    }
+
+    public static function apiDocGenerateFilterMetadata(
+        string $filter_name,
+        string|AllowedFilter $filter,
+        string $singular_resource_name,
+        array $metadata = [],
+    ): array
+    {
+        $filter_title = Str::of($filter_name)
+            ->replaceMatches('/([a-z])([A-Z])/', '$1 $2') // Split camelCase: pEnding → p Ending
+            ->replace('_', ' ')                           // Replace custom separator (e.g. _ or space) with space
+            ->lower()                                     // Lowercase everything
+            ->title()                                     // Capitalize words
+            ->toString();
+
+        return array_merge([
+            'type' => 'string',
+            'description' => is_string($filter) ? 'Filter by the ' . Str::lower($filter_title)  . ' of the ' . $singular_resource_name : 'Apply the ' . Str::lower($filter_title) . ' filter',
+        ], $metadata);
+    }
+
+
     public static function apiDocDefaultQueryParameters(
         array $fields = [],
         array $sorts = [],
@@ -109,71 +346,25 @@ trait ApiDocHelpers
         $params = [];
 
         if ($fields) {
-            $params['fields'] = [
-                'type' => 'string',
-                'description' => 'Fields to include in the response. ' .
-                    'You can provide the fields as a comma-separated list, or provide the fields as an array query parameter i.e `fields[]`. ' .
-                    'By default all fields are included if the `fields` parameter is missing.'
-                    . '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $fields)),
-                'enum' => $fields,
-                'example' => implode(',', $fields),
-            ];
+            $params['fields'] = static::apiDocGenerateFieldsMetadata($fields);
         }
 
         if ($sorts) {
-            $params['sort'] = [
-                'type' => 'string',
-                'description' => 'Which fields to sort the results by. '.
-                    '<br>To sort in descending order, append a `-` to the field name, e.g. `?sort=-created_at`. '.
-                    '<br>To sort by multiple fields, provide a comma-separated list, e.g. `?sort=id,-created_at`. '.
-                    '<br><br>**Allowed sorts:** ' . "\n" . implode("\n", array_map(fn ($field) => "- `$field`", $sorts)) . "\n\n" .
-                    '<br>**Default sort:** ' . ($default_sort ? '`' . $default_sort . '`' : 'None'),
-                'enum' => static::apiDocAllowedSorts(),
-                'example' => static::apiDocDefaultSort(),
-            ];
+            $params['sort'] = static::apiDocGenerateSortsMetadata($sorts, $default_sort);
         }
 
         if ($appends) {
-            $params['append'] = [
-                'type' => 'string',
-                'description' => 'Model accessor fields to include in the response. ' .
-                    'You can provide the append field as a comma-separated list, or provide the fields as an array query parameter i.e `append[]`. ' .
-                    'By default all appends are included if the `append` parameter is missing. ' .
-                    'To not append any fields, provide an empty string `?append=`'
-                    . '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $appends)),
-                'enum' => $appends,
-                'example' => implode(',', $appends),
-            ];
+            $params['append'] = static::apiDocGenerateAppendsMetadata($appends);
         }
 
         if ($includes) {
-            $params['include'] = [
-                'type' => 'string',
-                'description' => 'Model relations to include in the response. ' .
-                    'You can provide the includes as a comma-separated list, or provide the includes as an array query parameter i.e `include[]`. ' .
-                    'By default all includes are included if the `include` parameter is missing. ' .
-                    'To not include any relations, provide an empty string `?include=`'
-                    . '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $includes)),
-                'enum' => $includes,
-                'example' => implode(',', $includes),
-            ];
+            $params['include'] = static::apiDocGenerateIncludesMetadata($includes);
         }
 
         if ($include_pagination) {
-            $params['per_page'] = [
-                'type' => 'integer',
-                'description' => 'How many results to return per page. '.
-                    (static::apiDocAllowUnlimitedResultsPerPage() ? '<br></br>To return all results, set `per_page` to `-1`' : '').
-                    '<br>**Max per page:** ' . static::apiDocMaxPerPage() .
-                    '<br>**Default per page:** ' . static::apiDocDefaultPerPage(),
-                'example' => static::apiDocDefaultPerPage(),
-            ];
+            $params['per_page'] = static::apiDocGeneratePerPageMetadata();
 
-            $params['page'] = [
-                'type' => 'integer',
-                'description' => 'For paginated results, which page to return.' ,
-                'example' => 1,
-            ];
+            $params['page'] = static::apiDocGeneratePageMetadata();
         }
 
         $singular_resource_name = static::apiDocResourceNameSingularLower();
@@ -194,17 +385,12 @@ trait ApiDocHelpers
 
                 $metadata = $filter_metadata[$filter_name] ?? [];
 
-                $filter_title = Str::of($filter_name)
-                    ->replaceMatches('/([a-z])([A-Z])/', '$1 $2') // Split camelCase: pEnding → p Ending
-                    ->replace('_', ' ')                    // Replace custom separator (e.g. _ or space) with space
-                    ->lower()                                     // Lowercase everything
-                    ->title()                                     // Capitalize words
-                    ->toString();
-
-                $params["filter[{$filter_name}]"] = array_merge([
-                    'type' => 'string',
-                    'description' => is_string($filter) ? 'Filter by the ' . Str::lower($filter_title)  . ' of the ' . $singular_resource_name : 'Apply the ' . Str::lower($filter_title) . ' filter',
-                ], $metadata);
+                $params["filter[{$filter_name}]"] = static::apiDocGenerateFilterMetadata(
+                    $filter_name,
+                    $filter,
+                    $singular_resource_name,
+                    $metadata,
+                );
             }
         }
 
@@ -214,12 +400,12 @@ trait ApiDocHelpers
     public static function apiDocDefaultIndexQueryParameters(): array
     {
         return static::apiDocDefaultQueryParameters(
-            static::apiDocIndexAllowedFields(),
-            static::apiDocAllowedSorts(),
+            static::apiDocAllIndexAllowedFields(),
+            static::apiDocAllAllowedSorts(),
             static::apiDocDefaultSort(),
-            static::apiDocIndexAllowedAppends(),
-            static::apiDocAllowedIncludes(),
-            static::apiDocAllowedFilters(),
+            static::apiDocAllIndexAllowedAppends(),
+            static::apiDocAllAllowedIncludes(),
+            static::apiDocAllAllowedFilters(),
             static::apiDocFilterMetadata(),
             true
         );
@@ -228,9 +414,9 @@ trait ApiDocHelpers
     public static function apiDocDefaultShowQueryParameters(): array
     {
         return static::apiDocDefaultQueryParameters(
-            fields: static::apiDocShowAllowedFields(),
-            appends: static::apiDocShowAllowedAppends(),
-            includes: static::apiDocAllowedIncludes()
+            fields: static::apiDocAllShowAllowedFields(),
+            appends: static::apiDocAllShowAllowedAppends(),
+            includes: static::apiDocAllAllowedIncludes()
         );
     }
 
@@ -336,12 +522,18 @@ trait ApiDocHelpers
 
     public static function apiDocIndexQueryParameters(): array
     {
-        return static::apiDocDefaultIndexQueryParameters();
+        return array_merge(
+            static::apiDocDefaultIndexQueryParameters(),
+            static::apiDocAdditionalIndexQueryParameters(),
+        );
     }
 
     public static function apiDocShowQueryParameters(): array
     {
-        return static::apiDocDefaultShowQueryParameters();
+        return array_merge(
+            static::apiDocDefaultShowQueryParameters(),
+            static::apiDocAdditionalShowQueryParameters()
+        );
     }
 
     public static function apiDocControllerMethodMetadata(string $method): array
