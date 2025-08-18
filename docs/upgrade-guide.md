@@ -1,7 +1,9 @@
 ---
-title: Migration from v2
+title: Upgrade Guide
 sidebar_position: 1.2
 ---
+
+## Migration from v2 to v3
 
 In v3, the access level of the `ApiBaseController` abstract methods have been changed from `protected` to `public`.
 
