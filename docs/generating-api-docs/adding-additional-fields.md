@@ -18,14 +18,14 @@ public static function apiDocAdditionalIndexQueryParameters(): array
     return [
         'lat' => [
             'type' => 'number',
-            'description' => 'Latitude to calculate distance from.'
-            'example' => 4.174446111
+            'description' => 'Latitude to calculate distance from.',
+            'example' => 4.174446111,
         ],
 
         'lng' => [
             'type' => 'number',
-            'description' => 'Longitude to calculate distance from.'
-            'example' => 73.5097
+            'description' => 'Longitude to calculate distance from.',
+            'example' => 73.5097,
         ],
     ];
 }
@@ -43,14 +43,14 @@ public static function apiDocAdditionalShowQueryParameters(): array
     return [
         'lat' => [
             'type' => 'number',
-            'description' => 'Latitude to calculate distance from.'
-            'example' => 4.174446111
+            'description' => 'Latitude to calculate distance from.',
+            'example' => 4.174446111,
         ],
 
         'lng' => [
             'type' => 'number',
-            'description' => 'Longitude to calculate distance from.'
-            'example' => 73.5097
+            'description' => 'Longitude to calculate distance from.',
+            'example' => 73.5097,
         ],
     ];
 }

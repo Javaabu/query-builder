@@ -26,7 +26,7 @@ public static function apiDocFilterMetadata(): array
         'search' => [
             'type' => 'string',
             'description' => 'Search products by name.',
-        ]
+        ],
     ];
 }
 ```
@@ -40,7 +40,7 @@ Use this method to describe what your resource is.
 // in ProductsController.php
 public static function apiDocGroupDescription(): string
 {
-    return 'Endpoints for listing and viewing products'.;
+    return 'Endpoints for listing and viewing products.';
 }
 ```
 
