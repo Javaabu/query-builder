@@ -49,7 +49,7 @@ trait IsApiController
      */
     protected function wantsAllResults(Request $request): bool
     {
-        return $request->input('per_page') == -1;
+        return $request->input('per_page', $this->getDefaultPerPage()) == -1;
     }
 
     /**
@@ -62,6 +62,16 @@ trait IsApiController
     protected function getPerPage(Request $request, int $default = 0)
     {
         return abs($request->input('per_page', $default));
+    }
+
+    public function getDefaultPerPage(): int
+    {
+        return 10;
+    }
+
+    public function getMaxPerPage(): int
+    {
+        return 50;
     }
 
     protected function getQueryBuilder(): QueryBuilder
@@ -100,7 +110,7 @@ trait IsApiController
             return $query->get();
         }
 
-        return $query->paginate($this->getPerPage($request, 10))
+        return $query->paginate($this->getPerPage($request, $this->getDefaultPerPage()))
             ->appends($request->except(['page']));
     }
 
@@ -169,7 +179,7 @@ trait IsApiController
     protected function getIndexValidation(): array
     {
         return [
-            'per_page' => "integer|" . ($this->allowUnlimitedResultsPerPage() ? 'min:-1' : 'between:1,50'),
+            'per_page' => "integer|" . ($this->allowUnlimitedResultsPerPage() ? 'min:-1' : 'between:1,' . $this->getMaxPerPage()),
             'page' => 'integer|min:1',
         ];
     }
