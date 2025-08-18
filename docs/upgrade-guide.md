@@ -1,6 +1,6 @@
 ---
 title: Upgrade Guide
-sidebar_position: 1.2
+sidebar_position: 1.3
 ---
 
 ## Migration from v2 to v3

@@ -99,8 +99,8 @@ trait ApiDocHelpers
             $params['sort'] = [
                 'type' => 'string',
                 'description' => 'Which fields to sort the results by. '.
-                    '<br>To sort in descending order, append a `-` to the field name, e.g. `?sort=-name`. '.
-                    '<br>To sort by multiple fields, provide a comma-separated list, e.g. `?sort=name,-created_at`. '.
+                    '<br>To sort in descending order, append a `-` to the field name, e.g. `?sort=-created_at`. '.
+                    '<br>To sort by multiple fields, provide a comma-separated list, e.g. `?sort=id,-created_at`. '.
                     '<br><br>**Allowed sorts:** ' . "\n" . implode("\n", array_map(fn ($field) => "- `$field`", $sorts)) . "\n\n" .
                     '<br>**Default sort:** ' . ($default_sort ? '`' . $default_sort . '`' : 'None'),
                 'enum' => static::apiDocAllowedSorts(),

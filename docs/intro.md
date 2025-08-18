@@ -5,8 +5,9 @@ sidebar_position: 1.0
 
 # Query Builder
 
+First, refer to the [spatie/query-builder](https://github.com/spatie/laravel-query-builder) docs for full usage on the Query Builder package.
 
-[Query Builder](https://github.com/Javaabu/query-builder) Modifications on top of spatie/query-builder.
+[Query Builder](https://github.com/Javaabu/query-builder) Modifications on top of [spatie/query-builder](https://github.com/spatie/laravel-query-builder).
 Provides helper classes for creating API controllers and supports [Scribe](https://github.com/knuckleswtf/scribe/) for automatically generating API docs.
 
 For example, if you have a `Product` model, you can create an API controller like so:

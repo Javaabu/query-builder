@@ -2,7 +2,6 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/javaabu/query-builder.svg?style=flat-square)](https://packagist.org/packages/javaabu/query-builder)
 [![Test Status](../../actions/workflows/run-tests.yml/badge.svg)](../../actions/workflows/run-tests.yml)
-[![Quality Score](https://img.shields.io/scrutinizer/g/javaabu/query-builder.svg?style=flat-square)](https://scrutinizer-ci.com/g/javaabu/query-builder)
 [![Total Downloads](https://img.shields.io/packagist/dt/javaabu/query-builder.svg?style=flat-square)](https://packagist.org/packages/javaabu/query-builder)
 
 Modifications on top of spatie/query-builder
