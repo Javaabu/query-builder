@@ -1,0 +1,11 @@
+{
+    "position": 1.5,
+    "label": "Advanced Usage",
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "slug": "/query-builder/_categories/advanced-usage",
+        "description": "How to achieve more complex requirements"
+    }
+}
