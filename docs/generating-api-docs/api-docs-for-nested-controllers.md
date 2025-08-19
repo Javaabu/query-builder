@@ -15,11 +15,38 @@ public static function apiDocNewControllerInstance(): static
     /** @var static $controller */
     $controller = app(static::class);
     
-    $form = \App\Models\Form::whereSlug('sample_form_for_docs')->first();
+    $form = \App\Models\Form::whereSlug('sample-form-for-docs')->first();
     
     $controller->setAdditionalParams(compact('form'));
     
     return $controller;
+}
+```
+
+Add you can set the relevant URL parameters to use your sample value by giving the value as the example value, by specifying controller metada.
+
+```php
+// in FormFieldsController.php
+
+/**
+ * @urlParam form_slug string required The slug of the form. Example: sample-form-for-docs
+ */
+class FormFieldsController extends NestedApiController
+{
+    // controller methods
+}
+```
+
+You can do the same thing using Attributes as well.
+
+```php
+// in FormFieldsController.php
+use Knuckles\Scribe\Attributes\UrlParam;
+
+#[UrlParam('form_slug', 'string', 'The slug of the form.', required: true, example: 'sample-form-for-docs')]
+class FormFieldsController extends NestedApiController
+{
+    // controller methods
 }
 ```
 
