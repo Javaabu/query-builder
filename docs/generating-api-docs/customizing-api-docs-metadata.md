@@ -12,7 +12,14 @@ Here are some of the methods we recommend to override.
 
 ## apiDocFilterMetadata()
 
-Use this method to describe what each filter does. Will support all properties allowed by `Knuckles\Scribe\Attributes\QueryParam` Attribute.
+Use this method to describe what each filter does.
+Will support the following properties:
+- `description`
+- `type`
+- `required`
+- `example`
+- `enumValues`
+- `nullable`
 
 ```php
 // in ProductsController.php

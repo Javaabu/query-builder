@@ -9,7 +9,13 @@ For those, you will need to define them as additional allowed methods by overrid
 ## apiDocAdditionalIndexQueryParameters()
 
 Use this method to specify additional query parameters for `index` endpoint.
-Will support all properties allowed by `Knuckles\Scribe\Attributes\QueryParam` Attribute.
+Will support the following properties: 
+- `description`
+- `type`
+- `required`
+- `example`
+- `enumValues`
+- `nullable`
 
 ```php
 // in IslandsController.php
@@ -34,7 +40,13 @@ public static function apiDocAdditionalIndexQueryParameters(): array
 ## apiDocAdditionalShowQueryParameters()
 
 Use this method to specify additional query parameters for `show` endpoint.
-Will support all properties allowed by `Knuckles\Scribe\Attributes\QueryParam` Attribute.
+Will support the following properties:
+- `description`
+- `type`
+- `required`
+- `example`
+- `enumValues`
+- `nullable`
 
 ```php
 // in IslandsController.php

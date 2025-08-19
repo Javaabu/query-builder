@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Javaabu\QueryBuilder\QueryBuilder;

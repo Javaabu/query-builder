@@ -206,9 +206,8 @@ trait ApiDocHelpers
     {
         return [
             'type' => 'string',
-            'description' => static::apiFieldsDescription() .
-                '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $fields)),
-            'enum' => $fields,
+            'description' => static::apiFieldsDescription(),
+            'enumValues' => $fields,
             'example' => implode(',', $fields),
         ];
     }
@@ -229,10 +228,8 @@ trait ApiDocHelpers
     {
         return [
             'type' => 'string',
-            'description' => static::apiSortsDescription() .
-                '<br><br>**Allowed sorts:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $sorts)) . "\n\n" .
-                '<br>**Default sort:** ' . ($default_sort ? '`' . $default_sort . '`' : 'None'),
-            'enum' => static::apiDocAllowedSorts(),
+            'description' => static::apiSortsDescription(),
+            'enumValues' => static::apiDocAllowedSorts(),
             'example' => static::apiDocDefaultSort(),
         ];
     }
@@ -254,9 +251,8 @@ trait ApiDocHelpers
     {
         return [
             'type' => 'string',
-            'description' => static::apiAppendsDescription() .
-                '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $appends)),
-            'enum' => $appends,
+            'description' => static::apiAppendsDescription(),
+            'enumValues' => $appends,
             'example' => implode(',', $appends),
         ];
     }
@@ -278,8 +274,8 @@ trait ApiDocHelpers
     {
         return [
             'type' => 'string',
-            'description' => static::apiIncludesDescription() . '<br><br> **Allowed values:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $includes)),
-            'enum' => $includes,
+            'description' => static::apiIncludesDescription(),
+            'enumValues' => $includes,
             'example' => implode(',', $includes),
         ];
     }
