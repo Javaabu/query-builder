@@ -77,10 +77,10 @@ class ApiControllerTest extends TestCase
 
         $this->assertIsArray($params);
 
-        $this->assertArrayHasKey('fields', $params);
-        $this->assertArrayHasKey('include', $params);
-        $this->assertArrayHasKey('append', $params);
-        $this->assertArrayHasKey('sort', $params);
+        $this->assertArrayHasKey('fields[]', $params);
+        $this->assertArrayHasKey('include[]', $params);
+        $this->assertArrayHasKey('append[]', $params);
+        $this->assertArrayHasKey('sort[]', $params);
         $this->assertArrayHasKey('per_page', $params);
         $this->assertArrayHasKey('page', $params);
         $this->assertArrayHasKey('filter[name]', $params);
@@ -94,9 +94,9 @@ class ApiControllerTest extends TestCase
 
         $this->assertIsArray($params);
 
-        $this->assertArrayHasKey('fields', $params);
-        $this->assertArrayHasKey('include', $params);
-        $this->assertArrayHasKey('append', $params);
+        $this->assertArrayHasKey('fields[]', $params);
+        $this->assertArrayHasKey('include[]', $params);
+        $this->assertArrayHasKey('append[]', $params);
 
         $this->assertArrayNotHasKey('sort', $params);
         $this->assertArrayNotHasKey('per_page', $params);

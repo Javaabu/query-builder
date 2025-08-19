@@ -208,7 +208,7 @@ trait ApiDocHelpers
             'type' => 'string[]',
             'description' => static::apiFieldsDescription(),
             'enumValues' => $fields,
-            'example' => $fields,
+            //'example' => $fields,
         ];
     }
 
@@ -231,7 +231,7 @@ trait ApiDocHelpers
             'description' => static::apiSortsDescription() .
                 '<br>**Default sort:** ' . ($default_sort ? '`' . $default_sort . '`' : 'None'),
             'enumValues' => $sorts,
-            'example' => [$default_sort],
+            //'example' => [$default_sort],
         ];
     }
 
@@ -254,7 +254,7 @@ trait ApiDocHelpers
             'type' => 'string[]',
             'description' => static::apiAppendsDescription(),
             'enumValues' => $appends,
-            'example' => $appends,
+            //'example' => $appends,
         ];
     }
 
@@ -277,7 +277,7 @@ trait ApiDocHelpers
             'type' => 'string[]',
             'description' => static::apiIncludesDescription(),
             'enumValues' => $includes,
-            'example' => $includes,
+            //'example' => $includes,
         ];
     }
 
@@ -289,7 +289,7 @@ trait ApiDocHelpers
                 (static::apiDocAllowUnlimitedResultsPerPage() ? '<br></br>To return all results, set `per_page` to `-1`' : '') .
                 '<br>**Max per page:** ' . static::apiDocMaxPerPage() .
                 '<br>**Default per page:** ' . static::apiDocDefaultPerPage(),
-            'example' => static::apiDocDefaultPerPage(),
+            //'example' => static::apiDocDefaultPerPage(),
         ];
     }
 
@@ -298,7 +298,7 @@ trait ApiDocHelpers
         return [
             'type' => 'integer',
             'description' => 'For paginated results, which page to return.',
-            'example' => 1,
+            //'example' => 1,
         ];
     }
 
