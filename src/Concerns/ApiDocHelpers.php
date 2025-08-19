@@ -228,9 +228,10 @@ trait ApiDocHelpers
     {
         return [
             'type' => 'string',
-            'description' => static::apiSortsDescription(),
-            'enumValues' => static::apiDocAllowedSorts(),
-            'example' => static::apiDocDefaultSort(),
+            'description' => static::apiSortsDescription() .
+                '<br>**Default sort:** ' . ($default_sort ? '`' . $default_sort . '`' : 'None'),
+            'enumValues' => $sorts,
+            'example' => $default_sort,
         ];
     }
 
