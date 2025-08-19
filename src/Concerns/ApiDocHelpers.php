@@ -205,10 +205,10 @@ trait ApiDocHelpers
     public static function apiDocGenerateFieldsMetadata(array $fields): array
     {
         return [
-            'type' => 'string',
+            'type' => 'string[]',
             'description' => static::apiFieldsDescription(),
             'enumValues' => $fields,
-            'example' => implode(',', $fields),
+            'example' => $fields,
         ];
     }
 
@@ -227,11 +227,11 @@ trait ApiDocHelpers
     public static function apiDocGenerateSortsMetadata(array $sorts, string $default_sort = ''): array
     {
         return [
-            'type' => 'string',
+            'type' => 'string[]',
             'description' => static::apiSortsDescription() .
                 '<br>**Default sort:** ' . ($default_sort ? '`' . $default_sort . '`' : 'None'),
             'enumValues' => $sorts,
-            'example' => $default_sort,
+            'example' => [$default_sort],
         ];
     }
 
@@ -251,10 +251,10 @@ trait ApiDocHelpers
     public static function apiDocGenerateAppendsMetadata(array $appends): array
     {
         return [
-            'type' => 'string',
+            'type' => 'string[]',
             'description' => static::apiAppendsDescription(),
             'enumValues' => $appends,
-            'example' => implode(',', $appends),
+            'example' => $appends,
         ];
     }
 
@@ -274,10 +274,10 @@ trait ApiDocHelpers
     public static function apiDocGenerateIncludesMetadata(array $includes): array
     {
         return [
-            'type' => 'string',
+            'type' => 'string[]',
             'description' => static::apiIncludesDescription(),
             'enumValues' => $includes,
-            'example' => implode(',', $includes),
+            'example' => $includes,
         ];
     }
 
@@ -337,19 +337,19 @@ trait ApiDocHelpers
         $params = [];
 
         if ($fields) {
-            $params['fields'] = static::apiDocGenerateFieldsMetadata($fields);
+            $params['fields[]'] = static::apiDocGenerateFieldsMetadata($fields);
         }
 
         if ($sorts) {
-            $params['sort'] = static::apiDocGenerateSortsMetadata($sorts, $default_sort);
+            $params['sort[]'] = static::apiDocGenerateSortsMetadata($sorts, $default_sort);
         }
 
         if ($appends) {
-            $params['append'] = static::apiDocGenerateAppendsMetadata($appends);
+            $params['append[]'] = static::apiDocGenerateAppendsMetadata($appends);
         }
 
         if ($includes) {
-            $params['include'] = static::apiDocGenerateIncludesMetadata($includes);
+            $params['include[]'] = static::apiDocGenerateIncludesMetadata($includes);
         }
 
         if ($include_pagination) {
