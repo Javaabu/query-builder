@@ -108,90 +108,84 @@ trait ApiDocHelpers
         );
     }
 
+    public static function apiDocNewControllerInstance(): static
+    {
+        return app(static::class);
+    }
+
     public static function apiDocDefaultSort(): string
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->getDefaultSort();
     }
 
     public static function apiDocAllowedFilters(): array
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->getAllowedFilters();
     }
 
     public static function apiDocAllowedIncludes(): array
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->getAllowedIncludes();
     }
 
     public static function apiDocIndexAllowedFields(): array
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return array_merge($new_instance->getIndexAllowedFields(), $new_instance->getAllowedAppendAttributes());
     }
 
     public static function apiDocIndexAllowedAppends(): array
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->getAllowedAppendAttributes();
     }
 
     public static function apiDocShowAllowedFields(): array
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return array_merge($new_instance->getAllowedFields(), $new_instance->getShowAllowedAppendAttributes());
     }
 
     public static function apiDocShowAllowedAppends(): array
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->getShowAllowedAppendAttributes();
     }
 
     public static function apiDocAllowedSorts(): array
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->getAllowedSorts();
     }
 
     public static function apiDocDefaultPerPage(): int
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->getDefaultPerPage();
     }
 
     public static function apiDocMaxPerPage(): int
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->getMaxPerPage();
     }
 
     public static function apiDocAllowUnlimitedResultsPerPage(): bool
     {
-        /** @var self $new_instance */
-        $new_instance = app(static::class);
+        $new_instance = static::apiDocNewControllerInstance();
 
         return $new_instance->allowUnlimitedResultsPerPage();
     }
@@ -221,8 +215,8 @@ trait ApiDocHelpers
 
     public static function apiDefaultSortsDescription(): string
     {
-        return 'Which fields to sort the results by. '.
-            '<br>To sort in descending order, append a `-` to the field name, e.g. `?sort=-created_at`. '.
+        return 'Which fields to sort the results by. ' .
+            '<br>To sort in descending order, append a `-` to the field name, e.g. `?sort=-created_at`. ' .
             '<br>To sort by multiple fields, provide a comma-separated list, e.g. `?sort=id,-created_at`. ';
     }
 
@@ -236,7 +230,7 @@ trait ApiDocHelpers
         return [
             'type' => 'string',
             'description' => static::apiSortsDescription() .
-                '<br><br>**Allowed sorts:** ' . "\n" . implode("\n", array_map(fn ($field) => "- `$field`", $sorts)) . "\n\n" .
+                '<br><br>**Allowed sorts:** ' . "\n" . implode("\n", array_map(fn($field) => "- `$field`", $sorts)) . "\n\n" .
                 '<br>**Default sort:** ' . ($default_sort ? '`' . $default_sort . '`' : 'None'),
             'enum' => static::apiDocAllowedSorts(),
             'example' => static::apiDocDefaultSort(),
@@ -294,8 +288,8 @@ trait ApiDocHelpers
     {
         return [
             'type' => 'integer',
-            'description' => 'How many results to return per page. '.
-                (static::apiDocAllowUnlimitedResultsPerPage() ? '<br></br>To return all results, set `per_page` to `-1`' : '').
+            'description' => 'How many results to return per page. ' .
+                (static::apiDocAllowUnlimitedResultsPerPage() ? '<br></br>To return all results, set `per_page` to `-1`' : '') .
                 '<br>**Max per page:** ' . static::apiDocMaxPerPage() .
                 '<br>**Default per page:** ' . static::apiDocDefaultPerPage(),
             'example' => static::apiDocDefaultPerPage(),
@@ -306,16 +300,16 @@ trait ApiDocHelpers
     {
         return [
             'type' => 'integer',
-            'description' => 'For paginated results, which page to return.' ,
+            'description' => 'For paginated results, which page to return.',
             'example' => 1,
         ];
     }
 
     public static function apiDocGenerateFilterMetadata(
-        string $filter_name,
+        string               $filter_name,
         string|AllowedFilter $filter,
-        string $singular_resource_name,
-        array $metadata = [],
+        string               $singular_resource_name,
+        array                $metadata = [],
     ): array
     {
         $filter_title = Str::of($filter_name)
@@ -327,20 +321,20 @@ trait ApiDocHelpers
 
         return array_merge([
             'type' => 'string',
-            'description' => is_string($filter) ? 'Filter by the ' . Str::lower($filter_title)  . ' of the ' . $singular_resource_name : 'Apply the ' . Str::lower($filter_title) . ' filter',
+            'description' => is_string($filter) ? 'Filter by the ' . Str::lower($filter_title) . ' of the ' . $singular_resource_name : 'Apply the ' . Str::lower($filter_title) . ' filter',
         ], $metadata);
     }
 
 
     public static function apiDocDefaultQueryParameters(
-        array $fields = [],
-        array $sorts = [],
+        array  $fields = [],
+        array  $sorts = [],
         string $default_sort = '',
-        array $appends = [],
-        array $includes = [],
-        array $filters = [],
-        array $filter_metadata = [],
-        bool $include_pagination = false
+        array  $appends = [],
+        array  $includes = [],
+        array  $filters = [],
+        array  $filter_metadata = [],
+        bool   $include_pagination = false
     ): array
     {
         $params = [];
@@ -379,7 +373,7 @@ trait ApiDocHelpers
                     $filter_name = $filter->getName();
                 }
 
-                if (! $filter_name) {
+                if (!$filter_name) {
                     continue;
                 }
 

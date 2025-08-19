@@ -12,7 +12,7 @@ Use this method to specify additional query parameters for `index` endpoint.
 Will support all properties allowed by `Knuckles\Scribe\Attributes\QueryParam` Attribute.
 
 ```php
-// in Islands.php
+// in IslandsController.php
 public static function apiDocAdditionalIndexQueryParameters(): array
 {
     return [
@@ -37,7 +37,7 @@ Use this method to specify additional query parameters for `show` endpoint.
 Will support all properties allowed by `Knuckles\Scribe\Attributes\QueryParam` Attribute.
 
 ```php
-// in Islands.php
+// in IslandsController.php
 public static function apiDocAdditionalShowQueryParameters(): array
 {
     return [
