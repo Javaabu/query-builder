@@ -17,18 +17,21 @@ jobs:
             matrix:
                 os: [ ubuntu-latest ]
                 php: [ 8.4, 8.3, 8.2 ]
-                laravel: [ 12.*, 11.*, 10.* ]
+                laravel: [ 13.*, 12.*, 11.*, 10.* ]
                 stability: [ prefer-lowest, prefer-stable ]
                 include:
                     -   laravel: 12.*
                         testbench: 10.*
                         carbon: ^3.8.4
                     -   laravel: 11.*
-                        testbench: 9.*
+                        testbench: ^9.16
                         carbon: ^2.63
                     -   laravel: 10.*
                         testbench: 8.*
                         carbon: ^2.63
+                exclude:
+                    -   laravel: 13.*
+                        php: 8.2
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -46,7 +49,7 @@ jobs:
                 with:
                     php-version: ${{ matrix.php }}
                     extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv
-                    coverage: ${{ startsWith(github.event.head_commit.message, 'coverage') && matrix.php == '8.4' && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable' && 'xdebug' || 'none' }}
+                    coverage: ${{ startsWith(github.event.head_commit.message, 'coverage') && matrix.php == '8.4' && matrix.laravel == '13.*' && matrix.stability == 'prefer-stable' && 'xdebug' || 'none' }}
 
             -   name: Install dependencies
                 run: |
@@ -55,10 +58,10 @@ jobs:
 
             -   name: Execute tests
                 run: |
-                    vendor/bin/phpunit ${{ startsWith(github.event.head_commit.message, 'coverage') && matrix.php == '8.4' && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable' && '--coverage-clover=clover.xml' || '' }}
+                    vendor/bin/phpunit ${{ startsWith(github.event.head_commit.message, 'coverage') && matrix.php == '8.4' && matrix.laravel == '13.*' && matrix.stability == 'prefer-stable' && '--coverage-clover=clover.xml' || '' }}
 
             -   name: Make code coverage badge
-                if: startsWith(github.event.head_commit.message, 'coverage') && matrix.php == '8.4' && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable'
+                if: startsWith(github.event.head_commit.message, 'coverage') && matrix.php == '8.4' && matrix.laravel == '13.*' && matrix.stability == 'prefer-stable'
                 uses: timkrase/phpunit-coverage-badge@v1.2.1
                 with:
                     coverage_badge_path: .github/coverage.svg
