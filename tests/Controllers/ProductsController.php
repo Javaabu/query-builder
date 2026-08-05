@@ -31,6 +31,18 @@ class ProductsController extends ApiController
 
         return $query;
     }
+
+    /**
+     * Get the index allowed fields
+     */
+    public function getIndexAllowedFields(): array
+    {
+        return [
+            'id',
+            'name',
+        ];
+    }
+
     /**
      * Get the allowed fields
      *

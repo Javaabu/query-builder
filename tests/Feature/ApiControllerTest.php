@@ -301,4 +301,23 @@ class ApiControllerTest extends TestCase
                 'rating' => $product_2->id + 10,
             ]);
     }
+
+    #[Test]
+    public function it_does_not_include_fields_that_are_not_allowed(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $product_1 = Product::factory()->create([
+            'name' => 'Apple',
+            'slug' => 'apple'
+        ]);
+
+        $this->getJson('/products')
+            ->assertJsonMissing([
+                'slug' => 'apple',
+            ])
+            ->assertJsonFragment([
+                'name' => 'Apple',
+            ]);
+    }
 }
