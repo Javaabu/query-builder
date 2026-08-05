@@ -14,6 +14,10 @@ class Product extends Model
 
     protected $guarded = [];
 
+    protected $hidden = [
+        'brand_id',
+    ];
+
     /**
      * Create a new factory instance for the model.
      */

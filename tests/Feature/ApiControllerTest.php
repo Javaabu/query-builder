@@ -320,4 +320,43 @@ class ApiControllerTest extends TestCase
                 'name' => 'Apple',
             ]);
     }
+
+    #[Test]
+    public function it_does_not_show_hidden_fields(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $brand = Brand::factory()->create();
+
+        $product = Product::factory()->create([
+            'name' => 'Apple',
+            'brand_id' => $brand->id,
+        ]);
+
+        $this->getJson('/products/' . $product->id)
+            ->assertSuccessful()
+            ->assertJsonMissing([
+                'brand_id' => $brand->id,
+            ])
+            ->assertJsonFragment([
+                'name' => 'Apple',
+            ]);
+    }
+
+    #[Test]
+    public function it_cannot_explicitly_request_hidden_fields(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $brand = Brand::factory()->create();
+
+        $product = Product::factory()->create([
+            'name' => 'Apple',
+            'brand_id' => $brand->id,
+        ]);
+
+        $this->expectException(InvalidFieldQuery::class);
+
+        $this->getJson('/products/' . $product->id . '?fields=id,brand_id');
+    }
 }

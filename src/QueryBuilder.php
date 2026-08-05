@@ -242,11 +242,60 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
      */
     protected function addAppendsToResults(Collection $results): Collection
     {
-        return $results->each(function (Model $result) {
+        $outputFields = $this->getOutputFields();
+
+        return $results->each(function (Model $result) use ($outputFields) {
             $to_append = $this->getAllAppends();
 
-            return $result->append($to_append);
+            $result->append($to_append);
+
+            if ($outputFields !== null) {
+                $result->setVisible(array_unique(array_merge(
+                    $outputFields,
+                    $to_append,
+                    array_keys($result->getRelations())
+                )));
+            }
+
+            return $result;
         });
+    }
+
+    /**
+     * Get the fields that should be visible on the output when no fields
+     * were explicitly requested, restricting to the allowed fields.
+     *
+     * Returns null when no restriction should be applied (e.g. fields were
+     * explicitly requested, in which case the query select already handles it).
+     *
+     * @return array|null
+     */
+    protected function getOutputFields(): ?array
+    {
+        if (! $this->allowedFields instanceof Collection) {
+            return null;
+        }
+
+        $modelTableName = $this->getSubject()->getModel()->getTable();
+
+        $fields = $this->request->fields();
+        $modelFields = $fields->has($modelTableName) ? $fields->get($modelTableName) : $fields->get('_');
+
+        if (! empty($modelFields)) {
+            return null;
+        }
+
+        $outputFields = $this->allowedFields
+            ->filter(fn ($field) => Str::startsWith($field, "{$modelTableName}."))
+            ->map(fn ($field) => Str::after($field, "{$modelTableName}."))
+            ->values()
+            ->all();
+
+        if ($this->fieldsToAlwaysInclude instanceof Collection) {
+            $outputFields = array_unique(array_merge($outputFields, $this->fieldsToAlwaysInclude->all()));
+        }
+
+        return $outputFields;
     }
 
     /**
