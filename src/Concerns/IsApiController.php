@@ -134,7 +134,7 @@ trait IsApiController
                 ->allowedFields($this->getAllowedFields())
                 ->allowedIncludes($this->getAllowedIncludes());
 
-            $model = $this->modifyQuery($model)->findOrFail($model_id);
+            $model = $this->findModel($this->modifyQuery($model), $model_id);
 
             $this->authorizeView($model);
 
@@ -142,6 +142,28 @@ trait IsApiController
         } catch (ModelNotFoundException $e) {
             abort(404, 'Not Found');
         }
+    }
+
+    /**
+     * Which field is used for the show route
+     * Return null to use the default route key
+     */
+    public function getRouteKeyName(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Find the model using the $model id,
+     * Throw exception if not found
+     */
+    protected function findModel(\Spatie\QueryBuilder\QueryBuilder $query, $model_id): Model
+    {
+        if ($key_name = $this->getRouteKeyName()) {
+            return $query->where($key_name, $model_id)->firstOrFail();
+        }
+
+        return $query->findOrFail($model_id);
     }
 
     public function setAdditionalParams(mixed $params): self

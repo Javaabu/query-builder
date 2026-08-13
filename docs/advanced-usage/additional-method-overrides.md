@@ -108,3 +108,19 @@ public function getAllShowAllowedAppends(): array
 }
 ```
 
+## findModel
+
+Override this method if you want to modify how the model is resolved for the show method.
+The method should return a `Model` instance or throw a `Illuminate\Database\Eloquent\ModelNotFoundException` exception if it can't be found.
+
+```php
+protected function findModel(\Spatie\QueryBuilder\QueryBuilder $query, $model_id): Model
+{
+    if ($key_name = $this->getRouteKeyName()) {
+        return $query->where($key_name, $model_id)->firstOrFail();
+    }
+
+    return $query->findOrFail($model_id);
+}
+```
+

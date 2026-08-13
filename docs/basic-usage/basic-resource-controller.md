@@ -249,3 +249,15 @@ public function getAllowedFilters(): array
     ];
 }
 ```
+
+## getRouteKeyName()
+
+Allows customizing the field used for the show method. Return null to use the default route key field defined in the model.
+For example to use `slug` instead of `id`.
+
+```php
+public function getRouteKeyName(): ?string
+{
+    return 'slug';
+}
+```

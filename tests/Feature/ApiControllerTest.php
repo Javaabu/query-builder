@@ -3,6 +3,7 @@
 namespace Javaabu\QueryBuilder\Tests\Feature;
 
 use Illuminate\Support\Facades\Route;
+use Javaabu\QueryBuilder\Tests\Controllers\BrandsController;
 use Javaabu\QueryBuilder\Tests\Controllers\ProductsController;
 use Javaabu\QueryBuilder\Tests\InteractsWithDatabase;
 use Javaabu\QueryBuilder\Tests\Models\Brand;
@@ -28,6 +29,7 @@ class ApiControllerTest extends TestCase
     {
         Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
         Route::get('/products/{id}', [ProductsController::class, 'show'])->name('products.show');
+        Route::get('/brands/{id}', [BrandsController::class, 'show'])->name('brands.show');
     }
 
     #[Test]
@@ -358,5 +360,20 @@ class ApiControllerTest extends TestCase
         $this->expectException(InvalidFieldQuery::class);
 
         $this->getJson('/products/' . $product->id . '?fields=id,brand_id');
+    }
+
+    #[Test]
+    public function it_can_show_api_models_by_custom_route_key_name(): void
+    {
+        $brand = Brand::factory()->create([
+            'slug' => 'apple',
+            'name' => 'Banana',
+        ]);
+
+        $this->getJson('/brands/apple')
+            ->assertSuccessful()
+            ->assertJsonFragment([
+                'name' => 'Banana',
+            ]);
     }
 }
