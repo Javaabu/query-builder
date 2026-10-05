@@ -22,7 +22,7 @@ Then publish the Scribe config.
 php artisan vendor:publish --tag=scribe-config
 ```
 
-## Add custom Sribe Strategies
+## Add custom Scribe Strategies
 
 Now add the following Strategies provided by this package to the `scribe.php` config file.
 
@@ -42,6 +42,140 @@ Now add the following Strategies provided by this package to the `scribe.php` co
     ],
 ],
 ```
+
+## Generate response scenarios
+
+The package also includes `ResponseScenarioCalls` for generating multiple real
+responses per endpoint. These classes require Scribe 5.3 or later; Scribe remains
+an optional dependency of Query Builder.
+
+Replace Scribe's default `ResponseCalls` strategy in `config/scribe.php`:
+
+```php
+use Javaabu\QueryBuilder\Scribe\Strategies\ResponseScenarioCalls;
+use Knuckles\Scribe\Config\Defaults;
+use Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls;
+
+'strategies' => [
+    // Keep your other extraction stages.
+    'responses' => [
+        ...array_filter(
+            Defaults::RESPONSES_STRATEGIES,
+            static fn (string $strategy): bool => $strategy !== ResponseCalls::class,
+        ),
+        ResponseScenarioCalls::withSettings(config: ['app.debug' => false]),
+    ],
+],
+```
+
+Declare scenarios with repeatable method attributes or an `apiDocScenarios()`
+provider keyed by controller action name. Providers may be public static methods
+or public instance methods resolved through Laravel's container. Each action
+accepts a single scenario or a list; attributes and provider scenarios are combined.
+
+```php
+use Javaabu\QueryBuilder\Scribe\Attributes\ResponseScenario;
+
+public static function apiDocScenarios(): array
+{
+    return [
+        'store' => [
+            new ResponseScenario(
+                name: 'Created',
+                body: ['name' => 'Island Life'],
+                expected_status: 201,
+            ),
+            new ResponseScenario(
+                name: 'Validation failed',
+                body: [],
+                expected_status: 422,
+            ),
+        ],
+    ];
+}
+
+#[ResponseScenario(name: 'Not found', url: ['id' => 999999], expected_status: 404)]
+#[ResponseScenario(name: 'Unauthenticated', without_authentication: true, expected_status: 401)]
+public function show(string $id)
+{
+    // Your endpoint implementation.
+}
+```
+
+The constructor supports `url`, `body`, `query`, `files` (local upload paths),
+`cookies`, `config`, `expected_status`, `description`, `without_authentication`,
+`setup`, and `setup_data`. Body and file input replace extracted examples so an
+empty body can exercise validation. Query, cookie, and config overrides merge with
+global response-call settings. URL keys must match route placeholders, including
+optional placeholders. Each scenario uses a cloned endpoint, preserving the
+documented example URL.
+
+The response description defaults to `name`. Give scenarios meaningful names,
+and store them as lists so scenarios sharing an HTTP status are retained. A status
+mismatch or an unsuccessful explicit response call fails generation. Explicit
+scenarios run for any HTTP method; endpoints without scenarios retain Scribe's
+GET-only fallback and existing-success-response behavior.
+
+### Prepare scenario state
+
+Keep application-specific setup classes in `app/Support/Scribe/Setups` and
+implement the package contract:
+
+```php
+namespace App\Support\Scribe\Setups;
+
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Javaabu\QueryBuilder\Scribe\Attributes\ResponseScenario;
+use Javaabu\QueryBuilder\Scribe\Contracts\ResponseScenarioSetup;
+use Knuckles\Camel\Extraction\ExtractedEndpointData;
+
+class CreateProductSetup implements ResponseScenarioSetup
+{
+    public function __invoke(
+        Request $request,
+        ExtractedEndpointData $endpoint_data,
+        ResponseScenario $scenario,
+    ): void {
+        Product::factory()->create(['name' => $scenario->setup_data['name']]);
+    }
+}
+```
+
+Set `setup: CreateProductSetup::class` and `setup_data: ['name' => 'Island Life']`
+on a scenario, or pass an ordered list of setup classes. Setups are container
+resolved, receive the same scenario data, and run after Scribe's
+`beforeResponseCall` hook inside its database transaction. Authentication guards
+are cleared between calls; `without_authentication` removes authorization headers
+even when a hook or setup adds them.
+
+List every mutated connection in `database_connections_to_transact`. Use a
+documentation database and fake external effects such as mail, notifications,
+queues, payments, and filesystem writes; database rollback cannot undo them.
+
+### Expose named examples in OpenAPI
+
+To make same-status scenarios selectable in external UIs such as Scalar, register
+the package generator after any other custom OpenAPI generators:
+
+```php
+'openapi' => [
+    'enabled' => true,
+    'overrides' => [],
+    'generators' => [
+        // Your other generators first.
+        \Javaabu\QueryBuilder\Scribe\ResponseExamplesOpenApiGenerator::class,
+    ],
+],
+```
+
+It preserves generated schemas and adds uniquely named examples under
+`responses.<status>.content.<media-type>.examples`. Binary bodies are skipped;
+JSON is decoded and plain text is retained. OAuth grant schemas and application
+setup classes remain application customizations.
+
+After generation, check `.scribe/endpoints` for all scenarios and `openapi.yaml`
+for their named examples. Generate twice to check that no scenario state leaks.
 
 ## Configure Auth
 
@@ -91,5 +225,4 @@ php artisan scribe:generate
 ```
 
 And your API docs will be magically created with sensible documentation.
-
 
