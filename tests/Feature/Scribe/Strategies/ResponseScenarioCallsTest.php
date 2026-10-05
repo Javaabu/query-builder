@@ -180,7 +180,10 @@ class ResponseScenarioCallsTest extends TestCase
         for ($generation = 0; $generation < 2; $generation++) {
             $responses = $strategy($endpoint);
             $output = new OutputEndpointData([
-                ...$endpoint->forSerialisation(),
+                'uri' => $endpoint->uri,
+                'httpMethods' => $endpoint->httpMethods,
+                'metadata' => $endpoint->metadata,
+                'headers' => $endpoint->headers,
                 'responses' => $responses,
             ]);
             $specs[] = $writer->generateSpecContent([
